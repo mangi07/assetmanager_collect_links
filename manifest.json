@@ -1,0 +1,24 @@
+{
+ "manifest_version": 2,
+ "name": "Attachment Scraper",
+ "description": "Obtain all urls for attachments.",
+ "version": "1",
+ "author": "Ben Olson",
+"browser_action": {
+   "default_icon": "app-icon.png",
+   "default_title": "Attachment Scraper",
+   "default_popup": "popup.html"
+ },
+ "permissions": [
+   "activeTab",
+   "clipboardWrite"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*"],
+      "js": [
+        "get_attachments.js"
+      ]
+    }
+  ]
+}
