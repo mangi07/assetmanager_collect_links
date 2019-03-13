@@ -15,10 +15,8 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://*"],
-      "js": [
-        "get_attachments.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["get_attachments.js"]
     }
   ]
 }

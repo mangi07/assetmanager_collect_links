@@ -7,24 +7,24 @@ function setMessage(msg) {
   document.querySelector('#msg').innerText = msg;
 }
 
+  
 function getLink(element){
-  var href = child.firstElementChild.getAttribute("href");
+  var href = element.firstElementChild.getAttribute("href");
   if (href !== null) {
     return href;
   } else {
-    var a = child.getElementsByClassName("UXHyperLink");
+    var a = element.getElementsByClassName("UXHyperLink");
     return a[0].innerText;
   }
 }
-    
-function getUrls() {
+
+
+function getUrls(getLink) {
   // get attachments
   var attachments = [];
   var table = document.getElementById("ctl14_uxGVFileAttachment_lwResults_table_result");
   var rows = table.getElementsByClassName("row");
   var altrows = table.getElementsByClassName("altrow");
-  
-  
   
   for (var i = 0; i < rows.length; ++i) {
     var child = rows[i].children[1];
@@ -50,37 +50,30 @@ function getUrls() {
   return attstr;
 }
 
+
 /* from https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard */
 function updateClipboard(newClip) {
   navigator.clipboard.writeText(newClip).then(function() {
     /* clipboard successfully set */
     setMessage("Copied to clipboard: " + newClip);
-    console.log("From Attachment Scraper extension: " + urls);
   }, function() {
     /* clipboard write failed */
     setMessage("Could not copy the following to the clipboard: " + newClip);
   });
 }
 
+
 function copyUrls() {
   try {
     var urls;
     chrome.tabs.executeScript({
-        code: '(' + getUrls + ')();' //argument here is a string but function.toString() returns function's code
-    }, (results) => {
-        //Here we have just the innerHTML and not DOM structure
-        console.log('Popup script:')
-        console.log(results[0]);
-        urls = results[0];
-    });
-    //var urls = getUrls();
-    updateClipboard(url);
+        code: 'urls = ('+ getUrls +')(' + getLink + ')',
+    }, updateClipboard);
+    setMessage("got here");
   } catch (error) {
-    setMessage("Could not find the urls.")
+    setMessage("Could not find the urls.");
   }
 }
-
-
 
 
 document.addEventListener('DOMContentLoaded', function () {
